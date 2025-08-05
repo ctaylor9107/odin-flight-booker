@@ -8,7 +8,6 @@ class FlightsController < ApplicationController
         @view_params = params
 
         @available_flights = Flight.all.where("departure_time = ? AND departure_airport_id = ? AND arrival_airport_id = ?", params[:departure_time], params[:departure_airport_id], params[:arrival_airport_id])
-        # @booking = Booking.new
     end
 
 end
