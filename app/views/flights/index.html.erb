@@ -1,19 +1,41 @@
 <h1>Flights</h1>
 
 <%= form_with method: "get" do |form| %>
-    <%= label_tag(:query, "Search for:") %>
-    <%= select_tag(:departure_time, options_for_select(@departure_dates)) %>
-    <%= select_tag(:departure_airport_id, options_for_select(@departure_airports)) %>
-    <%= select_tag(:arrival_airport_id, options_for_select(@arrival_airports)) %>
-    <%= select_tag(:passenger_number, options_for_select([1, 2, 3, 4])) %>
+    <%= label_tag(:query, "Search for flights:") %><br><br>
+    <%= label_tag(:departure_date, "Departure Date:") %>
+    <%= select_tag(:departure_date, options_for_select(@dates)) %><br>
+    <%= label_tag(:departure_airport_id, "Departure Airport:") %>
+    <%= select_tag(:departure_airport_id, options_for_select(@departure_airports)) %><br>
+    <%= label_tag(:arrival_airport_id, "Arrival Airport:") %>
+    <%= select_tag(:arrival_airport_id, options_for_select(@arrival_airports)) %><br>
+    <%= label_tag(:passenger_number, "Number of Passengers:") %>
+    <%= select_tag(:passenger_number, options_for_select([1, 2, 3, 4])) %><br><br>
     <%= form.submit "Search" %>
 <% end %>
 
 <br>
 <br>
 
+<h2>Selected Flights</h2>
+
 <%= form_with url: "bookings/new", method: :get do |form| %>
     <%= form.hidden_field :passenger_number, value: params[:passenger_number] %>
-    <%= form.collection_radio_buttons :flight_id, @available_flights, :id, :flight_number %>
+    <%= form.collection_radio_buttons :flight_id, @available_flights, :id, :flight_number do |b| %>
+        <div class="radio-option">
+        <%= b.label do %>
+          <%= b.radio_button %>
+          <%= b.object.company %> Flight <%= b.object.flight_number %>
+          <ul>
+            <li>Departure Time: <%= b.object.departure_time %></li>
+            <li>Departure Airport: <%= b.object.departure_airport.airport_code %></li>
+            <li>Arrival Airport: <%= b.object.arrival_airport.airport_code %></li>
+            <li>Flight Duration: <%= b.object.flight_duration %></li>
+          </ul>
+        <% end %>
+        <% if b.object.respond_to?(:description) && b.object.description.present? %>
+          <p class="radio-description"><%= b.object.description %></p>
+        <% end %>
+      </div>
+    <% end %>
     <%= form.submit "Book Flight" %>
 <% end %>
