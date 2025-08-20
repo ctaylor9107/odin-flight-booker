@@ -21,3 +21,29 @@ Flight Duration: <%= @booking.flight.flight_duration %></p>
   <% end %>
 </ul>
 
+<div data-controller='change-passengers' data-change-passengers-hidden-class='hide'>
+  <button data-change-passengers-target='button' data-action='click->change-passengers#add'>Add Passenger</button><br><br>
+
+  <div data-change-passengers-target='form'>
+    <%= form_with model: @booking, method: :patch do |form| %>
+      <ul>
+        <%= form.fields_for :passengers, @booking.passengers.build do |passenger_form| %>
+          <li>
+            <%= passenger_form.label :name %>
+            <%= passenger_form.text_field :name %>
+
+            <%= passenger_form.label :email %>
+            <%= passenger_form.text_field :email %>
+        
+          </li><br>
+        <%= form.submit "Add New" %>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+
+  <button data-change-passengers-target='button'data-action='click->change-passenger#remove'>Remove Passenger</button>
+
+
+</div>
+

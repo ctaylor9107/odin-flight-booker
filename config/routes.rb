@@ -4,6 +4,6 @@ Rails.application.routes.draw do
 
   resources :flights
 
-  resources :bookings, only: [:new, :create, :show]
+  resources :bookings, only: [:new, :create, :show, :update]
 
 end
